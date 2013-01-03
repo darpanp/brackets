@@ -860,5 +860,6 @@ define(function (require, exports, module) {
 
     // Define public API
     exports.init = init;
+    exports.doOpen = doOpen;
 });
 

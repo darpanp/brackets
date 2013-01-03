@@ -73,7 +73,7 @@ define(function (require, exports, module) {
         ViewUtils          = require("utils/ViewUtils");
     
     var PREFERENCES_CLIENT_ID = "com.adobe.brackets.Editor",
-        defaultPrefs = { useTabChar: false, tabSize: 4, indentUnit: 4 };
+        defaultPrefs = { useTabChar: false, tabSize: 4, indentUnit: 4, wordWrap: false };
     
     /** Editor preferences */
     var _prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_CLIENT_ID, defaultPrefs);
@@ -86,6 +86,9 @@ define(function (require, exports, module) {
     
     /** @type {boolean}  Global setting: Indent unit (i.e. number of spaces when indenting) */
     var _indentUnit = _prefs.getValue("indentUnit");
+    
+    /** @type {boolean}  Global setting: Word wrap */
+    var _wordWrap = _prefs.getValue("wordWrap");
     
     /**
      * @private
@@ -252,8 +255,7 @@ define(function (require, exports, module) {
      * @type {Array.<Editor>}
      */
     var _instances = [];
-    
-    
+        
     /**
      * @constructor
      *
@@ -347,6 +349,7 @@ define(function (require, exports, module) {
             indentWithTabs: _useTabChar,
             tabSize: _tabSize,
             indentUnit: _indentUnit,
+            lineWrapping: _wordWrap,
             lineNumbers: true,
             matchBrackets: true,
             dragDrop: false,    // work around issue #1123
@@ -1184,6 +1187,24 @@ define(function (require, exports, module) {
     /** @type {number} Get indentation width */
     Editor.getIndentUnit = function (value) {
         return _indentUnit;
+    };
+    
+    /**
+     * Sets word wrap state. Affects all Editors.
+     * @param {number} value
+     */
+    Editor.setWordWrap = function (value) {
+        _wordWrap = value;
+        _instances.forEach(function (editor) {
+            editor._codeMirror.setOption("wordWrap", _wordWrap);
+        });
+        
+        _prefs.setValue("wordWrap", _wordWrap);
+    };
+    
+    /** @type {number} Get word wrap state  */
+    Editor.getWordWrap = function (value) {
+        return _wordWrap;
     };
     
     // Global commands that affect the currently focused Editor instance, wherever it may be

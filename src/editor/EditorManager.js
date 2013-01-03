@@ -121,6 +121,13 @@ define(function (require, exports, module) {
         }
     }
     
+    /*
+     * This is how the Editor's word wrap property is set by other modules using EditorManager
+     */
+    function setWordWrapForEditor(value) {
+        Editor.setWordWrap(value);
+    }
+    
     /**
      * Creates a new Editor bound to the given Document. The editor's mode is inferred based on the
      * file extension. The editor is appended to the given container as a visible child.
@@ -774,7 +781,7 @@ define(function (require, exports, module) {
 
         _onActiveEditorChange(null, getFocusedEditor(), null);
     }
-
+    
     // Initialize: command handlers
     CommandManager.register(Strings.CMD_TOGGLE_QUICK_EDIT, Commands.TOGGLE_QUICK_EDIT, _toggleQuickEdit);
     
@@ -813,4 +820,5 @@ define(function (require, exports, module) {
     exports.getInlineEditors = getInlineEditors;
     exports.closeInlineWidget = closeInlineWidget;
     exports.mergeExtraKeys = mergeExtraKeys;
+    exports.setWordWrapForEditor = setWordWrapForEditor;
 });
